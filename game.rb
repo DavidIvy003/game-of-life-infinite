@@ -39,6 +39,12 @@ class Grid
     end
   end
 
+  def multiple_generations num = 1
+    num.times.each do |i|
+      next!
+    end
+  end
+
   private
     def build_grid file
       grid = []

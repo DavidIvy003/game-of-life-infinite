@@ -36,6 +36,13 @@ describe Grid do
     disp = grid.display
     disp.scan(/\*/).count.must_equal 3
   end
+
+  it "advances multiple generations" do
+    grid = Grid.new( 9, 6, 'examples/9_by_5_matrix.txt')
+    grid.multiple_generations 2
+    disp = grid.display
+    disp.scan(/\*/).count.must_equal 4
+  end
 end
 
 describe Cell do
