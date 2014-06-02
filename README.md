@@ -10,11 +10,11 @@ Display Output:
 To run script, use: './game.rb'
 
 To view print of multiple generations:
-grid = Grid.new( 9, 6, 'examples/9_by_6_matrix.txt') ;nil
+grid = Grid.new( 17, 17, 'examples/pulsar_matrix.txt') ;nil
 puts grid.display
 puts ""
 
-5.times.each do |i|
+50.times.each do |i|
   grid.next!
   puts grid.display
   puts ""
