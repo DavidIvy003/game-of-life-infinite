@@ -27,7 +27,7 @@ describe Grid do
     grid = Grid.new( 5, 5, 'examples/5_by_5_matrix.txt')
     grid.next!
     disp = grid.display
-    disp.scan(/\*/).count.must_equal 2
+    disp.scan(/\*/).count.must_equal 6
   end
 end
 

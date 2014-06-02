@@ -7,6 +7,8 @@ end
 
 class Grid
 
+  attr_accessor :grid
+
   def initialize columns, rows, file=nil
     @columns = columns
     @rows    = rows
@@ -51,22 +53,29 @@ class Grid
       end
       grid.each_with_index do |row, row_idx|
         row.each_with_index do |col, col_idx|
-          cell = grid[row_idx][col_idx]
-          if row_idx > 0
-            cell.neighbors << grid[row_idx - 1][col_idx]
-          end
-          if col_idx > 0
-            cell.neighbors << grid[row_idx][col_idx - 1]
-          end
-          if col_idx < @columns - 1
-            cell.neighbors << grid[row_idx][col_idx + 1]
-          end
-          if row_idx < @rows - 1
-            cell.neighbors << grid[row_idx + 1][col_idx]
+          grid = populate_neighbors grid, row_idx, col_idx
+        end
+      end
+      grid
+    end
+
+    def populate_neighbors grid, cell_row, cell_col
+      cell = grid[cell_row][cell_col]
+      [cell_row - 1, cell_row, cell_row + 1].each do |r_idx|
+        [cell_col - 1, cell_col, cell_col + 1].each do |c_idx|
+          unless r_idx == cell_row and c_idx == cell_col
+            if within_grid?(r_idx, c_idx)
+              cell.neighbors << grid[r_idx][c_idx]
+            end
           end
         end
       end
       grid
+    end
+
+    def within_grid? row_idx, col_idx
+      ((row_idx >= 0 and row_idx < @rows - 1) and
+          (col_idx >= 0 and col_idx < @rows - 1))
     end
 end
 
