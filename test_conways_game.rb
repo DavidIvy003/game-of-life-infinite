@@ -23,11 +23,18 @@ describe Grid do
     disp.scan(/\*/).count.must_equal 4
   end
 
-  it "calculates the next generation" do
+  it "calculates the next generation of square" do
     grid = Grid.new( 5, 5, 'examples/5_by_5_matrix.txt')
     grid.next!
     disp = grid.display
     disp.scan(/\*/).count.must_equal 6
+  end
+
+  it "calculates the next generation of rectangle" do
+    grid = Grid.new( 9, 6, 'examples/9_by_6_matrix.txt')
+    grid.next!
+    disp = grid.display
+    disp.scan(/\*/).count.must_equal 3
   end
 end
 
