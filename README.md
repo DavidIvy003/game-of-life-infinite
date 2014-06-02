@@ -7,10 +7,18 @@ To run tests, just type 'rake'
 Display Output:
 ===============
 
-To run script, use: './recently_used.rb'
+To run script, use: './game.rb'
 
-To run with upper capacity, use: './recently_used.rb <capacity>'
-e.g.: './recently_used.rb 20' will only save 20 items
+To view print of multiple generations:
+grid = Grid.new( 9, 6, 'examples/9_by_6_matrix.txt') ;nil
+puts grid.display
+puts ""
+
+5.times.each do |i|
+  grid.next!
+  puts grid.display
+  puts ""
+end
 
 
 Instructions:
