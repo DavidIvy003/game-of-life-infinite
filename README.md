@@ -7,7 +7,7 @@ To run tests, just type 'rake'
 Display Output:
 ===============
 
-To run script, use: './game.rb'
+To run script, use: './game.rb examples/5_by_5_matrix.txt'
 
 To view print of multiple generations:
 grid = Grid.new( 17, 17, 'examples/pulsar_matrix.txt') ;nil

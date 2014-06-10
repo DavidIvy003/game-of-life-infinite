@@ -138,5 +138,5 @@ end
 
 if __FILE__ == $0
   # this will only run if the script was the main, not load'd or require'd
-  puts Grid.new(8,4).display
+  puts Grid.new(ARGV[0]).display
 end
