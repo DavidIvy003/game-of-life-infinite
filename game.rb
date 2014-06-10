@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'debugger'
-
 class InvalidInput < Exception
 end
 
