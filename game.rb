@@ -9,10 +9,12 @@ class Grid
 
   attr_accessor :grid
 
-  def initialize columns, rows, file=nil
-    @columns = columns
-    @rows    = rows
-    @grid    = build_grid file
+  def initialize file_name = ""
+    fail "No file with name: #{file_name}" unless File.exist? file_name
+    file     = File.read(file_name).split("\n")
+    @rows    = file.count
+    @columns = file.first.split(//).count
+    @grid    = build_from_file file
   end
 
   def display
@@ -40,17 +42,12 @@ class Grid
   end
 
   private
-    def build_grid file
+    def build_from_file file
       grid = []
-      if File.exist? file.to_s
-        File.read(file).split("\n").each do |row|
-          grid << row.split(//).map{|state| Cell.new(state)}
-        end
-      else
-        @rows.times.each do |row|
-          grid << @columns.times.map {|x| Cell.new('.')}
-        end
+      file.each do |row|
+        grid << row.split(//).map{|state| Cell.new(state)}
       end
+
       populate_neighbors grid
     end
 
