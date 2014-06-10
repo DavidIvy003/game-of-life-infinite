@@ -30,11 +30,11 @@ class Grid
 
   def next!
     each_cell do |cell|
-      cell.mutate!
+      cell.prepare_to_mutate!
     end
 
     each_cell do |cell|
-      cell.enforce!
+      cell.mutate!
     end
   end
 
@@ -109,13 +109,13 @@ class Cell
     @alive
   end
 
-  def mutate!
+  def prepare_to_mutate!
     die_if_underpopulated
     die_if_overpopulated
     revive_if_born
   end
 
-  def enforce!
+  def mutate!
     @alive = @next_state
   end
 

@@ -51,8 +51,8 @@ describe Cell do
     cell.neighbors << Cell.new('.')
     cell.neighbors << Cell.new('.')
     cell.neighbors << Cell.new('.')
+    cell.prepare_to_mutate!
     cell.mutate!
-    cell.enforce!
     cell.is_alive?.must_equal false
   end
 
@@ -62,8 +62,8 @@ describe Cell do
     cell.neighbors << Cell.new('*')
     cell.neighbors << Cell.new('*')
     cell.neighbors << Cell.new('*')
+    cell.prepare_to_mutate!
     cell.mutate!
-    cell.enforce!
     cell.is_alive?.must_equal false
   end
 
@@ -73,12 +73,12 @@ describe Cell do
     cell.neighbors << Cell.new('*')
     cell.neighbors << Cell.new('*')
     cell.neighbors << Cell.new('.')
+    cell.prepare_to_mutate!
     cell.mutate!
-    cell.enforce!
     cell.is_alive?.must_equal true
     cell.neighbors.shift
+    cell.prepare_to_mutate!
     cell.mutate!
-    cell.enforce!
     cell.is_alive?.must_equal true
   end
 
@@ -88,8 +88,8 @@ describe Cell do
     cell.neighbors << Cell.new('*')
     cell.neighbors << Cell.new('*')
     cell.neighbors << Cell.new('.')
+    cell.prepare_to_mutate!
     cell.mutate!
-    cell.enforce!
     cell.is_alive?.must_equal true
   end
 
