@@ -29,16 +29,12 @@ class Grid
   end
 
   def next!
-    @grid.each do |row|
-      row.each do |cell|
-        cell.mutate!
-      end
+    each_cell do |cell|
+      cell.mutate!
     end
 
-    @grid.each do |row|
-      row.each do |cell|
-        cell.enforce!
-      end
+    each_cell do |cell|
+      cell.enforce!
     end
   end
 
@@ -81,6 +77,14 @@ class Grid
     def is_neighbor? cell_row, cell_col, row_idx, col_idx
       (!(row_idx == cell_row and col_idx == cell_col) and
         within_grid?(row_idx, col_idx))
+    end
+
+    def each_cell
+      @grid.each do |row|
+        row.each do |cell|
+          yield cell
+        end
+      end
     end
 
     def each_cell_with_indexes
