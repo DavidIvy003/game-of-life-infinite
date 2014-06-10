@@ -15,6 +15,7 @@ class Grid
     @rows    = file.count
     @columns = file.first.split(//).count
     @grid    = build_from_file file
+    populate_neighbors!
   end
 
   def display
@@ -47,17 +48,13 @@ class Grid
       file.each do |row|
         grid << row.split(//).map{|state| Cell.new(state)}
       end
-
-      populate_neighbors grid
+      grid
     end
 
-    def populate_neighbors grid
-      grid.each_with_index do |row, row_idx|
-        row.each_with_index do |col, col_idx|
-          grid = cell_neighbors grid, row_idx, col_idx
-        end
+    def populate_neighbors!
+      each_cell_with_indexes do |col, row_idx, col_idx|
+        @grid = cell_neighbors @grid, row_idx, col_idx
       end
-      return grid
     end
 
     def cell_neighbors grid, cell_row, cell_col
@@ -84,6 +81,14 @@ class Grid
     def is_neighbor? cell_row, cell_col, row_idx, col_idx
       (!(row_idx == cell_row and col_idx == cell_col) and
         within_grid?(row_idx, col_idx))
+    end
+
+    def each_cell_with_indexes
+      @grid.each_with_index do |row, row_idx|
+        row.each_with_index do |cell, col_idx|
+          yield cell, row_idx, col_idx
+        end
+      end
     end
 end
 
