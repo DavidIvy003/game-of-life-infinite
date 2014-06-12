@@ -3,6 +3,50 @@
 class InvalidInput < Exception
 end
 
+class Game
+  def initialize(inputfile)
+    @generation   = 0
+    @delay        = 0.1
+    @history_size = 3
+    @history      = []
+    @grid         = Grid.new(inputfile)
+
+    @history << @grid.display
+
+    trap "SIGINT" do
+      end_game!
+    end
+  end
+
+  def run!
+    while true
+      puts @grid.display
+      sleep @delay
+      puts ""
+      @grid.next!
+      update_history!
+    end
+  end
+
+  private
+
+    def end_game! cycling = false
+      message = "Generation #{@generation}"
+      message += ", cycle repeats." if cycling
+      puts message
+      exit
+    end
+
+    def update_history!
+      @generation += 1
+      output = @grid.display
+
+      end_game!(true) if @history.include? output
+      @history << output
+      @history.shift if @history.size > @history_size
+    end
+end
+
 class Grid
 
   attr_accessor :grid
@@ -143,7 +187,9 @@ class Cell
     end
 end
 
+class GameOver < Exception; end
+
 if __FILE__ == $0
   # this will only run if the script was the main, not load'd or require'd
-  puts Grid.new(ARGV[0]).display
+  puts Game.new(ARGV[0]).run!
 end
