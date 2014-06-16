@@ -1,5 +1,8 @@
 class Grid
 
+  ALIVE = '*'
+  DEAD = '.'
+
   attr_accessor :grid
 
   def initialize file_name = ""
@@ -13,7 +16,7 @@ class Grid
 
   def display
     [].tap { |output|
-      output << @grid.map{|row| row.map{|cell| (cell.is_alive? ? '*' : '.')}.join}
+      output << @grid.map{|row| row.map{|cell| (cell.is_alive? ? ALIVE : DEAD)}.join}
     }.join("\n")
   end
 
@@ -35,7 +38,7 @@ class Grid
     def build_from_file file
       grid = []
       file.each do |row|
-        grid << row.split(//).map{|state| Cell.new(state)}
+        grid << row.split(//).map{|state| Cell.new(state == ALIVE)}
       end
       grid
     end

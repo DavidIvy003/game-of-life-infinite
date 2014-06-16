@@ -43,47 +43,47 @@ end
 
 describe Cell do
   it "is self aware" do
-    cell = Cell.new('*')
+    cell = Cell.new(true)
     cell.is_alive?.must_equal true
   end
 
   it "can have neighbors" do
-    cell = Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('.')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('.')
+    cell = Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(false)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(false)
     cell.neighbors.length.must_equal 4
   end
 
   it "dies with less than 2 live neighbors" do
-    cell = Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('.')
-    cell.neighbors << Cell.new('.')
-    cell.neighbors << Cell.new('.')
+    cell = Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(false)
+    cell.neighbors << Cell.new(false)
+    cell.neighbors << Cell.new(false)
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "dies with more than 3 live neighbors" do
-    cell = Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
+    cell = Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "lives if 2 or 3 neighbors live" do
-    cell = Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('.')
+    cell = Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(false)
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true
@@ -94,11 +94,11 @@ describe Cell do
   end
 
   it "reanimates with 3 live neighbors" do
-    cell = Cell.new('.')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('*')
-    cell.neighbors << Cell.new('.')
+    cell = Cell.new(false)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(true)
+    cell.neighbors << Cell.new(false)
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true

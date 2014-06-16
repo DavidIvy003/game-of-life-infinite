@@ -2,7 +2,7 @@ class Cell
   attr_accessor :neighbors, :next_state
 
   def initialize state
-    @alive = state == '*'
+    @alive = state
     @next_state = @alive
     @neighbors = []
   end
