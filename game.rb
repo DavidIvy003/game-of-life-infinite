@@ -7,10 +7,12 @@ class InvalidInput < Exception
 end
 
 class Game
+
+
   def initialize(inputfile)
+    @history_size = 3
     @generation   = 0
     @delay        = 0.1
-    @history_size = 3
     @history      = []
     @grid         = Grid.new(inputfile)
 
@@ -49,8 +51,6 @@ class Game
       @history.shift if @history.size > @history_size
     end
 end
-
-class GameOver < Exception; end
 
 if __FILE__ == $0
   # this will only run if the script was the main, not load'd or require'd

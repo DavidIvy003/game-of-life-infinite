@@ -3,7 +3,7 @@ class Grid
   attr_accessor :grid
 
   def initialize file_name = ""
-    fail "No file with name: #{file_name}" unless File.exist? file_name
+    raise "No file with name: #{file_name}" unless File.exist? file_name
     file     = File.read(file_name).split("\n")
     @rows    = file.count
     @columns = file.first.split(//).count
