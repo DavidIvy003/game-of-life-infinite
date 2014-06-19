@@ -42,63 +42,69 @@ describe Grid do
 end
 
 describe Cell do
+  let(:grid) { Grid.new('examples/4_by_4_blank.txt') }
+
   it "is self aware" do
-    cell = Cell.new(true)
+    cell = Cell.new(true, 1, 2, grid)
     cell.is_alive?.must_equal true
   end
 
+  it "has coordinates" do
+    cell = Cell.new(true, 1, 2, grid)
+    cell.row.must_equal 1
+    cell.column.must_equal 2
+  end
+
   it "can have neighbors" do
-    cell = Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(false)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(false)
-    cell.neighbors.length.must_equal 4
+    cell = Cell.new(true, 1, 1, grid)
+    grid.cell_at(1,0).alive = true
+    grid.cell_at(1,0).alive = true
+    cell.neighbors.length.must_equal 8
   end
 
   it "dies with less than 2 live neighbors" do
-    cell = Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(false)
-    cell.neighbors << Cell.new(false)
-    cell.neighbors << Cell.new(false)
+    cell = Cell.new(true, 1, 1, grid)
+    grid.cell_at(1,0).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "dies with more than 3 live neighbors" do
-    cell = Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
+    cell = Cell.new(true, 1, 1, grid)
+    grid.cell_at(1,0).alive = true
+    grid.cell_at(1,2).alive = true
+    grid.cell_at(0,1).alive = true
+    grid.cell_at(2,1).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
-  it "lives if 2 or 3 neighbors live" do
-    cell = Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(false)
+  it "lives if 2 neighbors live" do
+    cell = Cell.new(true, 1, 1, grid)
+    grid.cell_at(1,0).alive = true
+    grid.cell_at(0,1).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true
-    cell.neighbors.shift
+  end
+
+  it "lives if 3 neighbors live" do
+    cell = Cell.new(true, 1, 1, grid)
+    grid.cell_at(1,0).alive = true
+    grid.cell_at(0,1).alive = true
+    grid.cell_at(1,2).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true
   end
 
   it "reanimates with 3 live neighbors" do
-    cell = Cell.new(false)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(true)
-    cell.neighbors << Cell.new(false)
+    cell = Cell.new(false, 1, 1, grid)
+    grid.cell_at(1,0).alive = true
+    grid.cell_at(1,2).alive = true
+    grid.cell_at(0,1).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true

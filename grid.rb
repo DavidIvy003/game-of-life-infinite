@@ -11,7 +11,6 @@ class Grid
     @rows    = file.count
     @columns = file.first.split(//).count
     @grid    = build_from_file file
-    populate_neighbors!
   end
 
   def display
@@ -34,45 +33,21 @@ class Grid
     end
   end
 
+  def cell_at(x, y)
+    @grid[x][y] if @grid[x]
+  end
+
   private
     def build_from_file file
       grid = []
-      file.each do |row|
-        grid << row.split(//).map{|state| Cell.new(state == ALIVE)}
+      file.each_with_index do |row, r_idx|
+        grid_row = []
+        row.split(//).each_with_index do |state, c_idx|
+          grid_row << Cell.new(state == ALIVE, r_idx, c_idx, self)
+        end
+        grid << grid_row
       end
       grid
-    end
-
-    def populate_neighbors!
-      each_cell_with_indexes do |col, row_idx, col_idx|
-        @grid = cell_neighbors @grid, row_idx, col_idx
-      end
-    end
-
-    def cell_neighbors grid, cell_row, cell_col
-      cell = grid[cell_row][cell_col]
-      potential_neighbors(cell_row).each do |row_idx|
-        potential_neighbors(cell_col).each do |col_idx|
-          if is_neighbor? cell_row, cell_col, row_idx, col_idx
-            cell.neighbors << grid[row_idx][col_idx]
-          end
-        end
-      end
-      return grid
-    end
-
-    def within_grid? row_idx, col_idx
-      ((row_idx >= 0 and row_idx < @rows - 1) and
-          (col_idx >= 0 and col_idx < @rows - 1))
-    end
-
-    def potential_neighbors idx
-      [idx - 1, idx, idx + 1]
-    end
-
-    def is_neighbor? cell_row, cell_col, row_idx, col_idx
-      (!(row_idx == cell_row and col_idx == cell_col) and
-        within_grid?(row_idx, col_idx))
     end
 
     def each_cell

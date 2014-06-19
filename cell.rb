@@ -1,10 +1,13 @@
 class Cell
-  attr_accessor :neighbors, :next_state
+  attr_accessor :alive, :next_state, :row, :column
 
-  def initialize state
-    @alive = state
+  def initialize state, row, col, grid
+    @alive      = state
+    @row        = row
+    @column     = col
+    @grid       = grid
+
     @next_state = @alive
-    @neighbors = []
   end
 
   def is_alive?
@@ -21,14 +24,31 @@ class Cell
     @alive = @next_state
   end
 
-  private
-    def die!
-      @next_state = false
-    end
+  def neighbors
+    neighbours = []
+    neighbours.push(@grid.cell_at(row - 1, column - 1))
+    neighbours.push(@grid.cell_at(row - 1, column))
+    neighbours.push(@grid.cell_at(row - 1, column + 1))
 
-    def revive!
-      @next_state = true
-    end
+    neighbours.push(@grid.cell_at(row, column - 1))
+    neighbours.push(@grid.cell_at(row, column + 1))
+
+    neighbours.push(@grid.cell_at(row + 1, column - 1))
+    neighbours.push(@grid.cell_at(row + 1, column))
+    neighbours.push(@grid.cell_at(row + 1, column + 1))
+
+    neighbours
+  end
+
+  def die!
+    @next_state = false
+  end
+
+  def revive!
+    @next_state = true
+  end
+
+  private
 
     def die_if_underpopulated
       die! if num_alive_neighbors < 2
@@ -43,6 +63,6 @@ class Cell
     end
 
     def num_alive_neighbors
-      neighbors.select{|n| n.is_alive?}.count
+      neighbors.select{|n| n && n.is_alive?}.count
     end
 end
