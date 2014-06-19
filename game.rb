@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'debugger'
 require './grid'
 require './cell'
 

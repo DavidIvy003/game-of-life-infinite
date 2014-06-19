@@ -26,6 +26,12 @@ describe Grid do
     disp.scan(/\*/).count.must_equal 4
   end
 
+  it "must perserve rows and columns" do
+    grid = Grid.new( 'examples/4_by_4_blank.txt')
+    disp = grid.display
+    disp.scan(/\./).count.must_equal 16
+  end
+
   it "calculates the next generation of square" do
     grid = Grid.new( 'examples/5_by_5_matrix.txt')
     grid.next!
@@ -50,20 +56,23 @@ describe Cell do
   end
 
   it "has coordinates" do
-    cell = Cell.new(true, 1, 2, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     cell.row.must_equal 1
     cell.column.must_equal 2
   end
 
   it "can have neighbors" do
-    cell = Cell.new(true, 1, 1, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     grid.cell_at(1,0).alive = true
     grid.cell_at(1,0).alive = true
     cell.neighbors.length.must_equal 8
   end
 
   it "dies with less than 2 live neighbors" do
-    cell = Cell.new(true, 1, 1, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     grid.cell_at(1,0).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
@@ -71,7 +80,8 @@ describe Cell do
   end
 
   it "dies with more than 3 live neighbors" do
-    cell = Cell.new(true, 1, 1, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     grid.cell_at(1,0).alive = true
     grid.cell_at(1,2).alive = true
     grid.cell_at(0,1).alive = true
@@ -82,7 +92,8 @@ describe Cell do
   end
 
   it "lives if 2 neighbors live" do
-    cell = Cell.new(true, 1, 1, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     grid.cell_at(1,0).alive = true
     grid.cell_at(0,1).alive = true
     cell.prepare_to_mutate!
@@ -91,7 +102,8 @@ describe Cell do
   end
 
   it "lives if 3 neighbors live" do
-    cell = Cell.new(true, 1, 1, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     grid.cell_at(1,0).alive = true
     grid.cell_at(0,1).alive = true
     grid.cell_at(1,2).alive = true
@@ -101,7 +113,8 @@ describe Cell do
   end
 
   it "reanimates with 3 live neighbors" do
-    cell = Cell.new(false, 1, 1, grid)
+    cell = grid.cell_at(1,1)
+    cell.alive = true
     grid.cell_at(1,0).alive = true
     grid.cell_at(1,2).alive = true
     grid.cell_at(0,1).alive = true

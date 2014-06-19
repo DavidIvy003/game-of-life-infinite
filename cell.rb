@@ -22,20 +22,25 @@ class Cell
 
   def mutate!
     @alive = @next_state
+    @grid.delete(self) unless is_alive?
   end
 
   def neighbors
     neighbours = []
-    neighbours.push(@grid.cell_at(row - 1, column - 1))
-    neighbours.push(@grid.cell_at(row - 1, column))
-    neighbours.push(@grid.cell_at(row - 1, column + 1))
 
-    neighbours.push(@grid.cell_at(row, column - 1))
-    neighbours.push(@grid.cell_at(row, column + 1))
+    neighbours.push(@grid.cell_at(row - 1, column - 1, is_alive?))
+    neighbours.push(@grid.cell_at(row - 1, column, is_alive?))
+    neighbours.push(@grid.cell_at(row - 1, column + 1, is_alive?))
 
-    neighbours.push(@grid.cell_at(row + 1, column - 1))
-    neighbours.push(@grid.cell_at(row + 1, column))
-    neighbours.push(@grid.cell_at(row + 1, column + 1))
+    neighbours.push(@grid.cell_at(row, column - 1, is_alive?))
+    neighbours.push(@grid.cell_at(row, column + 1, is_alive?))
+
+    neighbours.push(@grid.cell_at(row + 1, column - 1, is_alive?))
+    neighbours.push(@grid.cell_at(row + 1, column, is_alive?))
+    neighbours.push(@grid.cell_at(row + 1, column + 1, is_alive?))
+
+    debugger if (row == 3 and column = 1)
+
 
     neighbours
   end
