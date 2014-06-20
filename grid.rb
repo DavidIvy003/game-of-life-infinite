@@ -52,11 +52,17 @@ class Grid
     if cell.nil? and create_cell
       cell = Cell.new(false, x, y, self)
       @grid << cell
+
+      @row_low     = x if @row_low > x
+      @rows        = x if @rows < x
+      @columns_low = y if @columns_low > y
+      @columns     = y if @columns < y
     end
     cell
   end
 
   def delete cell
+    # debugger if cell.row == 2 and cell.column == 1
     grid.delete_if {|c| c == cell}
   end
 
@@ -65,7 +71,7 @@ class Grid
       grid = []
       file.each_with_index do |row, r_idx|
         row.split(//).each_with_index do |state, c_idx|
-          grid << Cell.new(true, r_idx, c_idx, self) if state == ALIVE
+          grid << Cell.new(state == ALIVE, r_idx, c_idx, self)
         end
       end
       grid

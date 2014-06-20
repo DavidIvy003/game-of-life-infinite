@@ -56,68 +56,70 @@ describe Cell do
   end
 
   it "has coordinates" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,2, true)
     cell.alive = true
     cell.row.must_equal 1
     cell.column.must_equal 2
   end
 
   it "can have neighbors" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,1, true)
     cell.alive = true
-    grid.cell_at(1,0).alive = true
-    grid.cell_at(1,0).alive = true
+    grid.cell_at(1,0, true).alive = true
+    grid.cell_at(1,0, true).alive = true
     cell.neighbors.length.must_equal 8
   end
 
   it "dies with less than 2 live neighbors" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,1, true)
     cell.alive = true
-    grid.cell_at(1,0).alive = true
+    grid.cell_at(1,0, true).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "dies with more than 3 live neighbors" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,1, true)
     cell.alive = true
-    grid.cell_at(1,0).alive = true
-    grid.cell_at(1,2).alive = true
-    grid.cell_at(0,1).alive = true
-    grid.cell_at(2,1).alive = true
+    grid.cell_at(1,0, true).alive = true
+    grid.cell_at(1,2, true).alive = true
+    grid.cell_at(0,1, true).alive = true
+    grid.cell_at(2,1, true).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "lives if 2 neighbors live" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,1, true)
     cell.alive = true
-    grid.cell_at(1,0).alive = true
-    grid.cell_at(0,1).alive = true
+    cell.next_state = true
+    grid.cell_at(1,0, true).alive = true
+    grid.cell_at(0,1, true).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true
   end
 
   it "lives if 3 neighbors live" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,1, true)
     cell.alive = true
-    grid.cell_at(1,0).alive = true
-    grid.cell_at(0,1).alive = true
-    grid.cell_at(1,2).alive = true
+    cell.next_state = true
+    grid.cell_at(1,0, true).alive = true
+    grid.cell_at(0,1, true).alive = true
+    grid.cell_at(1,2, true).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true
   end
 
   it "reanimates with 3 live neighbors" do
-    cell = grid.cell_at(1,1)
+    cell = grid.cell_at(1,1, true)
     cell.alive = true
-    grid.cell_at(1,0).alive = true
-    grid.cell_at(1,2).alive = true
-    grid.cell_at(0,1).alive = true
+    grid.cell_at(1,0, true).alive = true
+    grid.cell_at(1,2, true).alive = true
+    grid.cell_at(0,1, true).alive = true
     cell.prepare_to_mutate!
     cell.mutate!
     cell.is_alive?.must_equal true
