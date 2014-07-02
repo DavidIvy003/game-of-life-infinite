@@ -24,17 +24,27 @@ next generation of the grid, follow these four rules:
 Examples: * indicates live cell, . indicates dead cell
 
 Example input: (4 x 8 grid)
+
 4 8
+
 ........
+
 ....*...
+
 ...**...
+
 ........
 
 Example output:
+
 4 8
+
 ........
+
 ...**...
+
 ...**...
+
 ........
 
 
@@ -56,6 +66,8 @@ To run script in console, use: './game.rb examples/30_by_30_acorn.txt'
 Examples
 ========
 ./game.rb examples/30_by_30_acorn.txt
+
 ./game.rb examples/4_by_4_glider.txt
+
 ./game.rb examples/pulsar_matrix.txt
 
