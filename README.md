@@ -1,18 +1,10 @@
-Tests:
-======
-
-To run tests, just type 'rake'
-
-
-Display Output:
-===============
-
-To run script, use: './game.rb examples/30_by_30_acorn.txt'
+Description
+===========
+This is a Ruby implementation of Conway's Game of Life in an infinite grid.
 
 
-Instructions:
-=============
-
+Conways Game of Life Instructions
+=================================
 Your task is to write a program to calculate the next
 generation of Conway's game of life, given any starting
 position. You start with a two dimensional grid of cells,
@@ -44,3 +36,26 @@ Example output:
 ...**...
 ...**...
 ........
+
+
+Dependencies
+============
+This implementation uses minitests to run the test suite.
+
+
+Tests
+======
+To run tests, just type 'rake'
+
+
+Console Output
+===============
+To run script in console, use: './game.rb examples/30_by_30_acorn.txt'
+
+
+Examples
+========
+./game.rb examples/30_by_30_acorn.txt
+./game.rb examples/4_by_4_glider.txt
+./game.rb examples/pulsar_matrix.txt
+
