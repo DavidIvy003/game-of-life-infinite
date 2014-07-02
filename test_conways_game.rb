@@ -46,11 +46,37 @@ describe Grid do
     disp.scan(/\*/).count.must_equal 4
   end
 
+  it "expands the grid if needed" do
+    grid = Grid.new( 'examples/4_by_3.txt')
+    disp = grid.display
+    rows = disp.split("\n")
+    rows.count.must_equal 4
+    rows.first.split(//).count.must_equal 3
+
+    grid.next!
+    disp = grid.display
+    rows = disp.split("\n")
+    rows.count.must_equal 5
+    rows.first.split(//).count.must_equal 4
+  end
+
   it "works in an infinite grid" do
     grid = Grid.new( 'examples/4_by_3.txt')
     grid.next!
     disp = grid.display
     disp.scan(/\*/).count.must_equal 3
+  end
+
+  it "persists for multiple generations" do
+    grid = Grid.new( 'examples/30_by_30_acorn.txt')
+    disp = grid.display
+    disp.scan(/\*/).count.must_equal 7
+    grid.next!
+    disp = grid.display
+    disp.scan(/\*/).count.must_equal 8
+    grid.next!
+    disp = grid.display
+    disp.scan(/\*/).count.must_equal 10
   end
 end
 
