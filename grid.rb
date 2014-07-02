@@ -39,18 +39,21 @@ class Grid
 
   def next!
     each_cell do |cell|
+      cell.num_alive_neighbours = alive_neighbors_of(cell).count
       cell.prepare_to_mutate!
     end
 
     each_cell do |cell|
       cell.mutate!
     end
+
+    grid.delete_if {|c| !c.is_alive?}
   end
 
   def cell_at x, y, create_cell = false
     cell = grid.select {|c| c.row == x && c.column == y}.first
     if cell.nil? and create_cell
-      cell = Cell.new(false, x, y, self)
+      cell = Cell.new(false, x, y)
       @grid << cell
 
       @row_low     = x if @row_low > x
@@ -62,8 +65,7 @@ class Grid
   end
 
   def delete cell
-    # debugger if cell.row == 2 and cell.column == 1
-    grid.delete_if {|c| c == cell}
+    grid.delete_if {|c| c.row == cell.row && c.column == cell.column}
   end
 
   private
@@ -71,7 +73,7 @@ class Grid
       grid = []
       file.each_with_index do |row, r_idx|
         row.split(//).each_with_index do |state, c_idx|
-          grid << Cell.new(state == ALIVE, r_idx, c_idx, self)
+          grid << Cell.new(state == ALIVE, r_idx, c_idx) if state == ALIVE
         end
       end
       grid
@@ -81,5 +83,25 @@ class Grid
       @grid.each do |cell|
         yield cell
       end
+    end
+
+    def alive_neighbors_of cell
+      row = cell.row
+      column = cell.column
+
+      neighbours = []
+
+      neighbours.push(cell_at(row - 1, column - 1, cell.is_alive?))
+      neighbours.push(cell_at(row - 1, column, cell.is_alive?))
+      neighbours.push(cell_at(row - 1, column + 1, cell.is_alive?))
+
+      neighbours.push(cell_at(row, column - 1, cell.is_alive?))
+      neighbours.push(cell_at(row, column + 1, cell.is_alive?))
+
+      neighbours.push(cell_at(row + 1, column - 1, cell.is_alive?))
+      neighbours.push(cell_at(row + 1, column, cell.is_alive?))
+      neighbours.push(cell_at(row + 1, column + 1, cell.is_alive?))
+
+      neighbours.select{|n| n && n.is_alive?}
     end
 end

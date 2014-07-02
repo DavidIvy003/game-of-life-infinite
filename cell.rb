@@ -1,11 +1,10 @@
 class Cell
-  attr_accessor :alive, :next_state, :row, :column, :num_neighbours
+  attr_accessor :alive, :next_state, :row, :column, :num_neighbours, :num_alive_neighbours
 
-  def initialize state, row, col, grid
+  def initialize state, row, col
     @alive      = state
     @row        = row
     @column     = col
-    @grid       = grid
 
     @next_state = @alive
   end
@@ -15,7 +14,6 @@ class Cell
   end
 
   def prepare_to_mutate!
-    @num_neighbours = nil
     die_if_underpopulated
     die_if_overpopulated
     revive_if_born
@@ -23,25 +21,6 @@ class Cell
 
   def mutate!
     @alive = @next_state
-    @grid.delete(self) unless @alive
-  end
-
-  def neighbors
-
-    neighbours = []
-
-    neighbours.push(@grid.cell_at(row - 1, column - 1, is_alive?))
-    neighbours.push(@grid.cell_at(row - 1, column, is_alive?))
-    neighbours.push(@grid.cell_at(row - 1, column + 1, is_alive?))
-
-    neighbours.push(@grid.cell_at(row, column - 1, is_alive?))
-    neighbours.push(@grid.cell_at(row, column + 1, is_alive?))
-
-    neighbours.push(@grid.cell_at(row + 1, column - 1, is_alive?))
-    neighbours.push(@grid.cell_at(row + 1, column, is_alive?))
-    neighbours.push(@grid.cell_at(row + 1, column + 1, is_alive?))
-
-    neighbours
   end
 
   def die!
@@ -67,6 +46,6 @@ class Cell
     end
 
     def num_alive_neighbors
-      @num_neighbours ||= neighbors.select{|n| n && n.is_alive?}.count
+      @num_alive_neighbours
     end
 end

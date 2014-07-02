@@ -40,7 +40,14 @@ describe Grid do
   end
 
   it "calculates the next generation of rectangle" do
-    grid = Grid.new( 'examples/9_by_6_matrix.txt')
+    grid = Grid.new( 'examples/2_by_2.txt')
+    grid.next!
+    disp = grid.display
+    disp.scan(/\*/).count.must_equal 4
+  end
+
+  it "works in an infinite grid" do
+    grid = Grid.new( 'examples/4_by_3.txt')
     grid.next!
     disp = grid.display
     disp.scan(/\*/).count.must_equal 3
@@ -51,76 +58,57 @@ describe Cell do
   let(:grid) { Grid.new('examples/4_by_4_blank.txt') }
 
   it "is self aware" do
-    cell = Cell.new(true, 1, 2, grid)
+    cell = Cell.new(true, 1, 2)
     cell.is_alive?.must_equal true
   end
 
   it "has coordinates" do
-    cell = grid.cell_at(1,2, true)
-    cell.alive = true
+    cell = Cell.new(true, 1, 2)
     cell.row.must_equal 1
     cell.column.must_equal 2
   end
 
-  it "can have neighbors" do
-    cell = grid.cell_at(1,1, true)
-    cell.alive = true
-    grid.cell_at(1,0, true).alive = true
-    grid.cell_at(1,0, true).alive = true
-    cell.neighbors.length.must_equal 8
-  end
-
   it "dies with less than 2 live neighbors" do
-    cell = grid.cell_at(1,1, true)
-    cell.alive = true
-    grid.cell_at(1,0, true).alive = true
+    cell = Cell.new(true, 1, 2)
+    cell.num_alive_neighbours = 1
     cell.prepare_to_mutate!
+    cell.is_alive?.must_equal true
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "dies with more than 3 live neighbors" do
-    cell = grid.cell_at(1,1, true)
-    cell.alive = true
-    grid.cell_at(1,0, true).alive = true
-    grid.cell_at(1,2, true).alive = true
-    grid.cell_at(0,1, true).alive = true
-    grid.cell_at(2,1, true).alive = true
+    cell = Cell.new(true, 1, 1)
+    cell.num_alive_neighbours = 4
     cell.prepare_to_mutate!
+    cell.is_alive?.must_equal true
     cell.mutate!
     cell.is_alive?.must_equal false
   end
 
   it "lives if 2 neighbors live" do
-    cell = grid.cell_at(1,1, true)
-    cell.alive = true
-    cell.next_state = true
-    grid.cell_at(1,0, true).alive = true
-    grid.cell_at(0,1, true).alive = true
+    cell = Cell.new(true, 1, 1)
+    cell.num_alive_neighbours = 2
     cell.prepare_to_mutate!
+    cell.is_alive?.must_equal true
     cell.mutate!
     cell.is_alive?.must_equal true
   end
 
   it "lives if 3 neighbors live" do
-    cell = grid.cell_at(1,1, true)
-    cell.alive = true
-    cell.next_state = true
-    grid.cell_at(1,0, true).alive = true
-    grid.cell_at(0,1, true).alive = true
-    grid.cell_at(1,2, true).alive = true
+    cell = Cell.new(true, 1, 1)
+    cell.num_alive_neighbours = 3
     cell.prepare_to_mutate!
+    cell.is_alive?.must_equal true
     cell.mutate!
     cell.is_alive?.must_equal true
   end
 
   it "reanimates with 3 live neighbors" do
-    cell = grid.cell_at(1,1, true)
-    cell.alive = true
-    grid.cell_at(1,0, true).alive = true
-    grid.cell_at(1,2, true).alive = true
-    grid.cell_at(0,1, true).alive = true
+    cell = Cell.new(false, 1, 1)
+    cell.num_alive_neighbours = 3
     cell.prepare_to_mutate!
+    cell.is_alive?.must_equal false
     cell.mutate!
     cell.is_alive?.must_equal true
   end
