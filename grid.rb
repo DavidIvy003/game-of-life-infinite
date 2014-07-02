@@ -38,16 +38,14 @@ class Grid
   end
 
   def next!
-    each_cell do |cell|
+    grid.each do |cell|
       cell.num_alive_neighbours = alive_neighbors_of(cell).count
       cell.prepare_to_mutate!
     end
 
-    each_cell do |cell|
-      cell.mutate!
-    end
+    grid.map &:mutate!
 
-    grid.delete_if {|c| !c.is_alive?}
+    grid.delete_if { |c| !c.is_alive? }
   end
 
   def cell_at x, y, create_cell = false
@@ -56,16 +54,9 @@ class Grid
       cell = Cell.new(false, x, y)
       @grid << cell
 
-      @row_low     = x if @row_low > x
-      @rows        = x if @rows < x
-      @columns_low = y if @columns_low > y
-      @columns     = y if @columns < y
+      expand_grid x, y
     end
     cell
-  end
-
-  def delete cell
-    grid.delete_if {|c| c.row == cell.row && c.column == cell.column}
   end
 
   private
@@ -79,29 +70,31 @@ class Grid
       grid
     end
 
-    def each_cell
-      @grid.each do |cell|
-        yield cell
-      end
-    end
-
     def alive_neighbors_of cell
-      row = cell.row
-      column = cell.column
+      row             = cell.row
+      column          = cell.column
+      create_new_cell = cell.is_alive?
 
       neighbours = []
 
-      neighbours.push(cell_at(row - 1, column - 1, cell.is_alive?))
-      neighbours.push(cell_at(row - 1, column, cell.is_alive?))
-      neighbours.push(cell_at(row - 1, column + 1, cell.is_alive?))
+      neighbours.push(cell_at(row - 1, column - 1, create_new_cell))
+      neighbours.push(cell_at(row - 1, column, create_new_cell))
+      neighbours.push(cell_at(row - 1, column + 1, create_new_cell))
 
-      neighbours.push(cell_at(row, column - 1, cell.is_alive?))
-      neighbours.push(cell_at(row, column + 1, cell.is_alive?))
+      neighbours.push(cell_at(row, column - 1, create_new_cell))
+      neighbours.push(cell_at(row, column + 1, create_new_cell))
 
-      neighbours.push(cell_at(row + 1, column - 1, cell.is_alive?))
-      neighbours.push(cell_at(row + 1, column, cell.is_alive?))
-      neighbours.push(cell_at(row + 1, column + 1, cell.is_alive?))
+      neighbours.push(cell_at(row + 1, column - 1, create_new_cell))
+      neighbours.push(cell_at(row + 1, column, create_new_cell))
+      neighbours.push(cell_at(row + 1, column + 1, create_new_cell))
 
       neighbours.select{|n| n && n.is_alive?}
+    end
+
+    def expand_grid x, y
+      @row_low     = x if @row_low > x
+      @rows        = x if @rows < x
+      @columns_low = y if @columns_low > y
+      @columns     = y if @columns < y
     end
 end
